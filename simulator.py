@@ -122,7 +122,7 @@ class simulator:
         user_credentials_d = {
             'EmailAddress': 'name@domain.com', 'Password': self.pswd_ws}
         login_req_header_d = {'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                              'Referer': 'https://websim.worldquantchallenge.com/login'}
+                              'Referer': 'https://websim.com/login'}
 
         # Create new session
         self.ssn = requests.Session()
@@ -130,13 +130,13 @@ class simulator:
         for i in range(3):
 
             # Log in to WebSim
-            login_req = self.ssn.post('https://websim.worldquantchallenge.com/login/process',
+            login_req = self.ssn.post('https://websim.com/login/process',
                                       data=user_credentials_d,
                                       headers=login_req_header_d,
                                       verify=False)
             # Check log in
             login_check = self.ssn.post(
-                'https://websim.worldquantchallenge.com/user')
+                'https://websim.com/user')
             try:
                 if (login_check.json()['result']['UserAlias'] == self.alias):
                     print('[LOG IN]Log in complete')
@@ -154,7 +154,7 @@ class simulator:
 
     def log_in_check(self, session):
         login_check = session.post(
-            'https://websim.worldquantchallenge.com/user')
+            'https://websim.com/user')
         try:
             if (login_check.json()['result']['UserAlias'] == 'AA00001'):
                 print('[LOG IN] Login check complete')
@@ -230,11 +230,11 @@ class simulator:
         for i in range(n_try):
             try:
                 request_pnl = self.ssn.post(
-                    'https://websim.worldquantchallenge.com/alphas/pnlchart/generate', data=pnl_data)
+                    'https://websim.com/alphas/pnlchart/generate', data=pnl_data)
                 time.sleep(3)
                 request_id = request_pnl.json()['result']['RequestId']
                 response_pnl = self.ssn.post(
-                    'https://websim.worldquantchallenge.com/alphas/pnlchart/result/' + str(request_id))
+                    'https://websim.com/alphas/pnlchart/result/' + str(request_id))
                 time.sleep(1)
                 response_pnl_result = response_pnl.json()['result']
                 pnl_dict = json.loads(
@@ -261,7 +261,7 @@ class simulator:
         for i in range(n_try):
             try:
                 sim_stats = self.ssn.post(
-                    'https://websim.worldquantchallenge.com/alphainfo', data=statistics_data)
+                    'https://websim.com/alphainfo', data=statistics_data)
                 time.sleep(1)
                 sim_stats_table = sim_stats.json(
                 )['result']['alphaInfo']['AlphaSimSum']
@@ -295,7 +295,7 @@ class simulator:
             'args': '{"alpha_list":["' + str(alpha_id) + '"], "corr_type":"self_corr"}'}
         for i in range(n_try):
             sim_stats_self_corr = self.ssn.post(
-                'https://websim.worldquantchallenge.com/correlation/start', data=correlation_self_data)
+                'https://websim.com/correlation/start', data=correlation_self_data)
             time.sleep(1)
             try:
                 sim_request_id = str(sim_stats_self_corr.json()[
@@ -312,7 +312,7 @@ class simulator:
                 FLAG = FLAG + 10
                 time.sleep(10)
                 sim_stats_self_corr_progress = self.ssn.post(
-                    'https://websim.worldquantchallenge.com/correlation/result/' + sim_request_id)
+                    'https://websim.com/correlation/result/' + sim_request_id)
                 if (~sim_stats_self_corr_progress.json()['result']['InProgress']):
                     FLAG = self.max_time_self_corr
             try:
@@ -333,7 +333,7 @@ class simulator:
             'args': '{"alpha_list":["' + str(alpha_id) + '"], "corr_type":"prod_corr"}'}
         for i in range(n_try):
             sim_stats_prod_corr = self.ssn.post(
-                'https://websim.worldquantchallenge.com/correlation/start', data=correlation_prod_data)
+                'https://websim.com/correlation/start', data=correlation_prod_data)
             time.sleep(1)
             try:
                 sim_request_id = str(sim_stats_prod_corr.json()[
@@ -350,7 +350,7 @@ class simulator:
                 FLAG = FLAG + 10
                 time.sleep(10)
                 sim_stats_prod_corr_progress = self.ssn.post(
-                    'https://websim.worldquantchallenge.com/correlation/result/' + sim_request_id)
+                    'https://websim.com/correlation/result/' + sim_request_id)
                 if (~sim_stats_prod_corr_progress.json()['result']['InProgress']):
                     FLAG = self.max_time_self_corr
             try:
@@ -378,7 +378,7 @@ class simulator:
         for i in rang(n_try):
             #
             sim_check_submission = self.ssn.post(
-                'https://websim.worldquantchallenge.com/submission/check', data=check_submission_data)
+                'https://websim.com/submission/check', data=check_submission_data)
             time.sleep(1)
             try:
                 check_request_id = str(sim_check_submission.json()[
@@ -394,7 +394,7 @@ class simulator:
                 FLAG = FLAG + 15
                 time.sleep(7)
                 sim_check_submission_progress = self.ssn.post(
-                    'https://websim.worldquantchallenge.com/submission/result' + check_request_id)
+                    'https://websim.com/submission/result' + check_request_id)
                 time.sleep(8)
                 if (sim_check_submission_progress.json()['error'] > 0):
                     if self.debug:
@@ -431,7 +431,7 @@ class simulator:
         metadata_data = create_metadata_data(
             name=name, color=color, alphaId=alpha_id)
         metadata_submit = self.ssn.post(
-            'https://websim.worldquantchallenge.com/alphameta', data=metadata_data)
+            'https://websim.com/alphameta', data=metadata_data)
         return
 
     def simulate(self, alpha):
@@ -443,7 +443,7 @@ class simulator:
         counter = 0
         while (counter < 2):
             counter = counter+1
-            simtest = ssn_local.post('https://websim.worldquantchallenge.com/simulate',
+            simtest = ssn_local.post('https://websim.com/simulate',
                                      data=simulate_data)
             # time.sleep(1)
             try:
@@ -466,7 +466,7 @@ class simulator:
                 FLAG = FLAG + 30
                 time.sleep(15)
                 sim_progress = ssn_local.post(
-                    'https://websim.worldquantchallenge.com/job/progress/' + sim_id)
+                    'https://websim.com/job/progress/' + sim_id)
                 try:
                     if self.debug:
                         print(sim_progress.json())
