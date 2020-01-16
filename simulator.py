@@ -38,7 +38,7 @@ class simulator:
         self.pswd_ws = ''
         self.alphas_list = []
         self.ssn = 0
-        self.alias = 'AG49601'
+        self.alias = 'AA00001'
         self.df_input = pd.DataFrame(columns=[
                                      'code', 'opcodetype', 'region', 'univid', 'opneut', 'optrunc', 'decay', 'parent'])
         self.results_keys = ['alpha_id', 'sim_date', 'submit_date', 'code', 'opcodetype',
